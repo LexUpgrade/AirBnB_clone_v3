@@ -83,7 +83,9 @@ class FileStorage:
         <cls> if exist or valid, otherwise the number of all the objects in
         storage.
         """
+        count = 0
         if cls:
-            return len(self.all(cls))
+            count = len(self.all(cls))
         else:
-            return len(self.all())
+            count = len(self.all())
+        return count
