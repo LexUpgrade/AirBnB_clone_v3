@@ -70,6 +70,10 @@ test_db_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
+
+    def setUp(self):
+        self.storage = DBStorage()
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -86,3 +90,24 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that a created user can be retrieved"""
+        info = {"name": "Alexander"}
+        new = State(**info)
+        self.storage.new(new)
+        self.storage.save()
+        self.assertEqual(new, self.storage.get(User, new.id))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test count method on db_storage."""
+        states = ['Lagos', 'Abuja', 'Cross River', 'Sokoto']
+        state_objs = [State(name=s) for s in states]
+        citiies = ['Calabar', 'Ikom', 'South', 'Municipal']
+        city_objs = [City(name=c, state_id=state_objs[2]) for c in cities]
+        [self.storage.new(state) for state in state_objs]
+        [self.storage.new(city) for city in city_objs]
+        self.storage.save()
+        self.assertEqual(len(self.storage.all()), self.storage.count())
