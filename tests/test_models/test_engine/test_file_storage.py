@@ -139,7 +139,8 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
         """Test the <count> method which return the number of instances
-        of a class if specified else the number of all the instances in storage.
+        of a class if specified else the number of all the instances in
+        storage.
         """
         storage = FileStorage()
         names = ['Alexander', 'Umaru', 'Eteka']
