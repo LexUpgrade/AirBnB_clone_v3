@@ -113,3 +113,37 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        """Test the <get> method with obtains a specific object."""
+        storage = FileStorage()
+        new = User()
+        storage.new(new)
+        storage.save()
+        self.assertEqual(new.id, storage(User, new.id))
+
+    def setUp(self):
+        """Rename an existing 'file.json' to 'oldFile.json' if it exists."""
+        if os.path.isfile("file.json"):
+            os.path.rename("file.json", "oldFile.json")
+            os.system("cp oldFile.json file.json")
+
+    def tearDown(self):
+        """Change back the name of the file 'oldFile.json' to 'file.json' if it
+        exists.
+        """
+        if os.path.isfile("oldFile.json"):
+            os.system("cat oldFile.json >> file.json")
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """Test the <count> method which return the number of instances
+        of a class if specified else the number of all the instances in storage.
+        """
+        storage = FileStorage()
+        names = ['Alexander', 'Umaru', 'Eteka']
+        users = [User(name=name) for name in names]
+        [storage.new(user) for user in users]
+        storage.save()
+        self.assertTrue(len(storage.all()), storage.count())
