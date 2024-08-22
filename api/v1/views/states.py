@@ -57,12 +57,11 @@ def post_new_state():
     if not request.get_json():
         abort(400, description="Not a JSON")
     elif "name" not in request.get_json():
-        abort(404, description="Missing name")
+        abort(400, description="Missing name")
     else:
         data = request.get_json()
         state = State(**data)
-        storage.new(state)
-        storage.save()
+        state.save()
         return make_response(jsonify(state.to_dict()), 201)
 
 
