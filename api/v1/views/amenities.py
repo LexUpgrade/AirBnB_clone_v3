@@ -17,6 +17,16 @@ def get_amenities():
 
 
 @app_views.route("/amenities/<amenity_id>",
+                 methods=['GET'], strict_slashes=False)
+def get_amenity_id(amenity_id):
+    """Gets a particular 'Amenity' object from the storage."""
+    amenity = storage.get(Amenity, amenity_id)
+    if not amenity:
+        abort(404)
+    return jsonify(amenity.to_dict())
+
+
+@app_views.route("/amenities/<amenity_id>",
                  methods=['DELETE'], strict_slashes=False)
 def delete_amenity(amenity_id):
     """Delete a particular 'Amenity' object from the storage."""
