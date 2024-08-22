@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Retrieves a ."""
+"""Creates views for 'City' that handles all default RESTful API actions.
+"""
 from models.state import State
 from models import storage
 from api.v1.views import app_views

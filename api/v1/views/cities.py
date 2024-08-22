@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Creates a new view for 'City' that handles all default RESTful API actions.
+"""Creates views for 'City' that handles all default RESTful API actions.
 """
 from api.v1.views import app_views
 from models import storage
