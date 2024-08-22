@@ -41,6 +41,8 @@ def delete_city_id(city_id):
 
 @app_views.route("/cities/<city_id>", methods=['POST'], strict_slashes=False)
 def post_city(city_id):
+    """Creates a new 'City'."""
+    data = request.get_json(silent=True)
     if not data:
         abort(400, description="Not a JSON")
     if "name" not in data.keys():
@@ -56,13 +58,15 @@ def post_city(city_id):
 def put_city(city_id):
     """Modifies an existing city by id."""
     city = storage.get(City, city_id)
+    data = request.get_json(silent=True)
+
     if not city:
         abort(404)
-    if not request.get_json():
+    if not data:
         abort(400, description="Not a JSON")
 
     data = request.get_json()
-    ignore = ['id', 'created_at', 'updated_at']
-    [setattr(city, k, v) for k, v in data.items() if v not in ignore]
-    storage.save()
+    ignore = ['id', 'state_id', 'created_at', 'updated_at']
+    [setattr(city, k, v) for k, v in data.items() if k not in ignore]
+    city.save()
     return make_response(jsonify(city.to_dict()), 200)
