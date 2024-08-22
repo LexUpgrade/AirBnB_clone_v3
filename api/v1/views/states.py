@@ -61,8 +61,7 @@ def post_new_state():
     else:
         data = request.get_json()
         state = State(**data)
-        storage.new(state)
-        storage.save()
+        state.save()
         return make_response(jsonify(state.to_dict()), 201)
 
 
