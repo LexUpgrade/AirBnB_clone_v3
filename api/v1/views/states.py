@@ -68,23 +68,19 @@ def post_new_state():
 
 @app_views.route("states/<state_id>", methods=["PUT"], strict_slashes=False)
 @swag_from("documentation/state/put_state.yml", methods=['PUT'])
-def put_state_obj(state_id):
+def put_state(state_id):
     """Updates an existing 'State' object if the passed <state_id> is valid,
     otherwise handles error accordingly.
     """
-    states = storage.all(State)
-    id = "State." + state_id
+    state = storage.get(State, state_id)
 
-    if id not in states.keys():
+    if not state:
         abort(404)
-
-    json_body = request.get_json()
-    if type(json_body) is not dict:
+    elif not request.get_json():
         abort(400, description="Not a JSON")
     else:
-        state_to_mod = states.get(id)
+        data = request.get_json()
         ignore = ['id', 'created_at', 'updated_at']
-        [setattr(state_to_mod, k, v) for k, v in json_body.items()
-            if k not in ignore]
+        [setattr(state, k, v) for k, v in data.items() if k not in ignore]
         storage.save()
-        return make_response(jsonify(state_to_mod.to_dict()), 200)
+        return make_response(jsonify(state.to_dict()), 200)
