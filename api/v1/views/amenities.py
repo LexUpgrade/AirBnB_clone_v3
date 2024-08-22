@@ -2,7 +2,7 @@
 """Creates views for 'Amenity' that handles all default RESTful API actions."""
 from api.v1.views import app_views
 from models import storage
-from models.amenity import Armenity
+from models.amenity import Amenity
 from flask import jsonify, abort, make_response, request
 
 
