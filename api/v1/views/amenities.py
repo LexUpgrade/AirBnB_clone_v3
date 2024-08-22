@@ -34,6 +34,7 @@ def delete_amenity(amenity_id):
     if not amenity:
         abort(404)
     storage.delete(amenity)
+    storage.save()
     return make_response(jsonify(dict()), 200)
 
 
