@@ -56,12 +56,13 @@ def post_new_state():
     """Creates a new 'State' object."""
     if not request.get_json():
         abort(400, description="Not a JSON")
-    elif "name" not in new_args.keys():
+    elif "name" not in request.get_json():
         abort(404, description="Missing name")
     else:
         data = request.get_json()
         state = State(**data)
-        state.save()
+        storage.new(state)
+        storage.save()
         return make_response(jsonify(state.to_dict()), 201)
 
 
@@ -81,5 +82,5 @@ def put_state(state_id):
         data = request.get_json()
         ignore = ['id', 'created_at', 'updated_at']
         [setattr(state, k, v) for k, v in data.items() if k not in ignore]
-        storage.save()
+        state.save()
         return make_response(jsonify(state.to_dict()), 200)
