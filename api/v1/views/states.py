@@ -54,16 +54,16 @@ def delete_state_by_id(state_id):
 @swag_from("documentation/state/post_state.yml", methods=['POST'])
 def post_new_state():
     """Creates a new 'State' object."""
-    new_args = request.get_json()
-    if type(new_args) is not dict:
+    if not request.get_json():
         abort(400, description="Not a JSON")
     elif "name" not in new_args.keys():
         abort(404, description="Missing name")
     else:
-        new_state = State(**new_args)
-        storage.new(new_state)
+        data = request.get_json()
+        state = State(**data)
+        storage.new(state)
         storage.save()
-        return make_response(jsonify(new_state.to_dict()), 201)
+        return make_response(jsonify(state.to_dict()), 201)
 
 
 @app_views.route("states/<state_id>", methods=["PUT"], strict_slashes=False)
