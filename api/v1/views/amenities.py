@@ -6,7 +6,7 @@ from models.amenity import Amenity
 from flask import jsonify, abort, make_response, request
 
 
-@app_views.route("/ameniteis", methods=['GET'], strict_slashes=False)
+@app_views.route("/amenities", methods=['GET'], strict_slashes=False)
 def get_amenities():
     """Gets all 'Amenity' objects from the storage."""
     amenities = storage.all(Amenity)
