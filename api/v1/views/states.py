@@ -62,7 +62,6 @@ def post_new_state():
     else:
         state = State(**data)
         state.save()
-        print(state.to_dict())
         return make_response(jsonify(state.to_dict()), 201)
 
 
