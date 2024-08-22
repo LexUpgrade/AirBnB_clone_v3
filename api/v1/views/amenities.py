@@ -9,11 +9,11 @@ from flask import jsonify, abort, make_response, request
 @app_views.route("/amenities", methods=['GET'], strict_slashes=False)
 def get_amenities():
     """Gets all 'Amenity' objects from the storage."""
-    amenities = storage.all(Amenity)
-    if not amenities:
-        abort(404)
-    data = [value.to_dict() for value in amenities.values()]
-    return jsonify(data)
+    amenities = storage.all(Amenity).values()
+    list_amenities = list()
+    for value in amenities:
+        list_amenities.append(value.to_dict())
+    return jsonify(list_amenities)
 
 
 @app_views.route("/amenities/<amenity_id>",
