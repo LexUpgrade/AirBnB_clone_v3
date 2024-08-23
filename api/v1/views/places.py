@@ -29,7 +29,7 @@ def get_place(place_id):
     return jsonify(place.to_dict())
 
 
-@app_views.route("/cities/<place_id>",
+@app_views.route("/places/<place_id>",
                  methods=['DELETE'], strict_slashes=False)
 def delete_place(place_id):
     """Deletes a specific 'Place' object from the storage."""
@@ -54,7 +54,7 @@ def post_place(city_id):
     elif "user_id" not in data:
         abort(400, description="Missing user_id")
 
-    user = storage.get(User, data.user_id)
+    user = storage.get(User, data.get('user_id'))
     if not user:
         abort(404)
     elif "name" not in data:
