@@ -61,8 +61,7 @@ def post_place(city_id):
         abort(400, description="Missing name")
     else:
         place = Place(**data)
-        storage.new(place)
-        storage.save()
+        place.save()
         return make_response(jsonify(place.to_dict()), 201)
 
 
