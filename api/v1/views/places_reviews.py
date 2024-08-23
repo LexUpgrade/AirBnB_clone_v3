@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Creates view for 'Place' on 'Review' that handles all 
+"""Creates view for 'Place' on 'Review' that handles all
 default RESTful API actions.
 """
 from models import storage
