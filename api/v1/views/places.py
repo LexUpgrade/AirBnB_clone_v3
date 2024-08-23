@@ -51,7 +51,7 @@ def post_place(city_id):
         abort(404)
     elif not data:
         abort(400, description="Not a JSON")
-    else "user_id" not in data:
+    elif "user_id" not in data:
         abort(400, description="Missing user_id")
 
     user = storage.get(User, data.user_id)
