@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""Creates view for 'Place' on 'Review' that handles all default RESTful API actions."""
+"""Creates view for 'Place' on 'Review' that handles all 
+default RESTful API actions.
+"""
 from models import storage
 from models.user import User
 from models.place import Place
@@ -79,4 +81,5 @@ def put_review(review_id):
     else:
         ignore = ['id', 'user_id', 'place_id', 'created_at', 'updated_at']
         [setattr(review, k, v) for k, v in data.items() if k not in ignore]
+        review.save()
         return make_response(jsonify(review.to_dict()), 200)
