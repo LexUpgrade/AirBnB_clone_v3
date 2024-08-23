@@ -76,6 +76,6 @@ def put_place(place_id):
         abort(400, description="Not a JSON")
     else:
         ignore = ['id', 'user_id', 'city_id', 'created_at', 'updated_at']
-        [setattr(place, k, v) for k, v in data.items if k not in ignore]
+        [setattr(place, k, v) for k, v in data.items() if k not in ignore]
         place.save()
         return make_response(jsonify(place.to_dict()), 200)
