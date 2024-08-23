@@ -38,7 +38,7 @@ def delete_place(place_id):
         abort(404)
     storage.delete(place)
     storage.save()
-    return make_response(jsonigy(dict()), 200)
+    return make_response(jsonify(dict()), 200)
 
 
 @app_views.route("/cities/<city_id>/places",
