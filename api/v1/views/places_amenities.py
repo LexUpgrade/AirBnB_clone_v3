@@ -2,9 +2,10 @@
 """Creates views for 'Amenity' on 'Place' that handles all
 default RESTful API actions.
 """
+from os import getenv
 from models.place import Place
 from models.amenity import Amenity
-from models import storage_t, storage
+from models import storage
 from api.v1.views import app_views
 from flask import jsonify, abort, make_response, request
 
@@ -17,7 +18,7 @@ def get_amenity(place_id):
     if not place:
         abort(404)
     else:
-        if storage_t == "db":
+        if getenv('HBNB_TYPE_STORAGE') == "db":
             amenities = [aminity.to_dict() for amenity in place.amenities]
         else:
             amenities = [storage.get(Amenity, amenity_id).to_dict()
@@ -39,7 +40,7 @@ def delete_amenities(place_id, amenity_id):
         abort(404)
     if amenity not in place.amenities:
         aborot(404)
-    if storage_t == "db":
+    if getenv('HBNB_TYPE_STORAGE') == "db":
         if amenity not in place.amenities:
             abort(404)
         place.amenities.remove(amenity)
@@ -47,14 +48,14 @@ def delete_amenities(place_id, amenity_id):
         if amenity_id not in place.amenity_ids:
             abort(404)
         place.amenity_ids.remove(amenity_id)
-    
+
     place.save()
     return make_response(jsonify(dict()), 200)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
                  methods=['POST'], strict_slashes=False)
-def post_amenity(place_id, amenity_id):
+def post_new_amenity(place_id, amenity_id):
     """Creates a new 'Amenity' object for a specific 'Place' object."""
     place = storage.get(Place, place_id)
     if not place:
@@ -63,7 +64,7 @@ def post_amenity(place_id, amenity_id):
     if not amenity:
         abort(404)
 
-    if storage_t == "id":
+    if getenv('HBNB_TYPE_STORAGE') == "db":
         if amenity in place.amenities:
             return make_response(jsonify(amenity.to_dict()), 200)
         else:
