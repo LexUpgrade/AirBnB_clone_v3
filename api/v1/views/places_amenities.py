@@ -10,19 +10,23 @@ from flask import jsonify, abort, make_response, request
 
 
 @app_views.route("/places/<place_id>/amenities",
-           methods=['GET'], strict_slashes=False)
+                 methods=['GET'], strict_slashes=False)
 def get_amenity(place_id):
     """Gets a list of all 'Amenity' object for a specific 'Place' object."""
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
     else:
-        amenities = [aminity.to_dict() for amenity in place.amenities]
+        if storage_t == "db":
+            amenities = [aminity.to_dict() for amenity in place.amenities]
+        else:
+            amenities = [storage.get(Amenity, amenity_id).to_dict()
+                         for amenity_id in place.amenity_ids]
         return jsonify(amenities)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
-           methods=['DELETE'], strict_slashes=False)
+                 methods=['DELETE'], strict_slashes=False)
 def delete_amenities(place_id, amenity_id):
     """Deletea a particular 'Amenity' object from a particular 'Place'
     object.
@@ -36,11 +40,15 @@ def delete_amenities(place_id, amenity_id):
     if amenity not in place.amenities:
         aborot(404)
     if storage_t == "db":
-        storage.delete(amenity)
-        storage.save()
-    else:
+        if amenity not in place.amenities:
+            abort(404)
         place.amenities.remove(amenity)
-        place.save()
+    else:
+        if amenity_id not in place.amenity_ids:
+            abort(404)
+        place.amenity_ids.remove(amenity_id)
+    
+    place.save()
     return make_response(jsonify(dict()), 200)
 
 
@@ -56,7 +64,7 @@ def post_amenity(place_id, amenity_id):
         abort(404)
 
     if storage_t == "id":
-        if amenity in place.amenity:
+        if amenity in place.amenities:
             return make_response(jsonify(amenity.to_dict()), 200)
         else:
             place.amenity.append(amenity)
