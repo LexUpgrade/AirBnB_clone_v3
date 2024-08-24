@@ -2,14 +2,14 @@
 """Creates views for 'Amenity' on 'Place' that handles all
 default RESTful API actions.
 """
-from models import storage, storage_t
-from models.amenity import Amenity
 from models.place import Place
-from api.v1.views import api_views
+from models.amenity import Amenity
+from models import storage_t, storage
+from api.v1.views import app_views
 from flask import jsonify, abort, make_response, request
 
 
-@app_views("/places/<place_id>/amenities",
+@app_views.route("/places/<place_id>/amenities",
            methods=['GET'], strict_slashes=False)
 def get_amenity(place_id):
     """Gets a list of all 'Amenity' object for a specific 'Place' object."""
@@ -21,8 +21,8 @@ def get_amenity(place_id):
         return jsonify(amenities)
 
 
-@app_views("/places/<place_id>/amenities/<amenity_id>",
-           methods=['DELETE'), strict_slashes=False)
+@app_views.route("/places/<place_id>/amenities/<amenity_id>",
+           methods=['DELETE'], strict_slashes=False)
 def delete_amenities(place_id, amenity_id):
     """Deletea a particular 'Amenity' object from a particular 'Place'
     object.
