@@ -5,11 +5,9 @@ from models.state import State
 from models import storage
 from api.v1.views import app_views
 from flask import jsonify, abort, make_response, request
-from flasgger.utils import swag_from
 
 
 @app_views.route("/states", methods=["GET"], strict_slashes=False)
-@swag_from("documentation/state/get_state", methods=['GET'])
 def get_all_states():
     """Retrieves all the list of all 'State' objects from storage."""
     states = storage.all(State)
@@ -19,7 +17,6 @@ def get_all_states():
 
 @app_views.route("/states/<string:state_id>",
                  methods=["GET"], strict_slashes=False)
-@swag_from("documentation/state/get_id_state.yml", methods=['GET'])
 def get_state_by_id(state_id):
     """Retrieves an object with the given id from storage if it exists,
     otherwise raises a 404 error.
@@ -33,7 +30,6 @@ def get_state_by_id(state_id):
 
 @app_views.route("/states/<string:state_id>", methods=["DELETE"],
                  strict_slashes=False)
-@swag_from("documentation/state/delete_state.yml", methods=['DELETE'])
 def delete_state_by_id(state_id):
     """Deletes a state by id from the storage if it exists,
     otherwise raises a 404 error.
@@ -52,7 +48,6 @@ def delete_state_by_id(state_id):
 
 
 @app_views.route("/states", methods=['POST'], strict_slashes=False)
-@swag_from("documentation/state/post_state.yml", methods=['POST'])
 def post_new_state():
     """Creates a new 'State' object."""
     data = request.get_json(silent=True)
@@ -67,7 +62,6 @@ def post_new_state():
 
 
 @app_views.route("states/<state_id>", methods=["PUT"], strict_slashes=False)
-@swag_from("documentation/state/put_state.yml", methods=['PUT'])
 def put_state(state_id):
     """Updates an existing 'State' object if the passed <state_id> is valid,
     otherwise handles error accordingly.
