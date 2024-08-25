@@ -10,7 +10,7 @@ from hashlib import md5
 
 
 class User(BaseModel, Base):
-    """Representation of a user """
+    """Representation of a user."""
     if models.storage_t == 'db':
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
